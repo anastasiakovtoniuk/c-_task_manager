@@ -1,0 +1,53 @@
+﻿<Page x:Class="StudyManager.WpfApp.Pages.SubjectDetailsPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      Background="{StaticResource BgBrush}">
+
+    <Grid>
+        <Border Background="{StaticResource CardBrush}"
+                BorderBrush="{StaticResource BorderBrush}"
+                BorderThickness="1"
+                CornerRadius="12"
+                Padding="16">
+
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <TextBlock x:Name="TitleText" Style="{StaticResource TitleText}"/>
+
+                <StackPanel Grid.Row="1" Margin="0,0,0,12">
+                    <TextBlock x:Name="InfoText" Foreground="#374151"/>
+                    <TextBlock x:Name="DurationText" Foreground="#374151" Margin="0,4,0,0"/>
+                </StackPanel>
+
+                <!-- Список занять -->
+                <Grid Grid.Row="2">
+                    <ListBox x:Name="LessonsList"
+                             DisplayMemberPath="Topic"
+                             BorderBrush="{StaticResource BorderBrush}"
+                             BorderThickness="1"
+                             Padding="6"/>
+
+                    <!-- Порожній стан -->
+                    <TextBlock x:Name="EmptyStateText"
+                               Text="Немає занять для цього предмета."
+                               Foreground="#6B7280"
+                               FontStyle="Italic"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               Visibility="Collapsed"/>
+                </Grid>
+
+                <StackPanel Grid.Row="3" Orientation="Horizontal" Margin="0,12,0,0">
+                    <Button Content="Деталі заняття" Style="{StaticResource PrimaryButton}" Click="OpenLesson_Click"/>
+                </StackPanel>
+            </Grid>
+
+        </Border>
+    </Grid>
+</Page>

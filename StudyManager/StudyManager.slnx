@@ -3,4 +3,5 @@
   <Project Path="StudyManager.ConsoleApp/StudyManager.ConsoleApp.csproj" />
   <Project Path="StudyManager.Services/StudyManager.Services.csproj" />
   <Project Path="StudyManager.Storage/StudyManager.Storage.csproj" />
+  <Project Path="StudyManager.WpfApp/StudyManager.WpfApp.csproj" Id="ad08fbc0-bb28-49fc-a2d7-03b7f6d6d81c" />
 </Solution>
