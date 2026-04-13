@@ -13,9 +13,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\StudyManager.App\StudyManager.App.csproj" />
+    <ProjectReference Include="..\StudyManager.Repositories\StudyManager.Repositories.csproj" />
     <ProjectReference Include="..\StudyManager.Services\StudyManager.Services.csproj" />
-    <ProjectReference Include="..\StudyManager.Storage\StudyManager.Storage.csproj" />
   </ItemGroup>
 
 </Project>

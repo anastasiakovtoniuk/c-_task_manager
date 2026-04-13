@@ -1,14 +1,15 @@
-﻿using System;
-using System.Windows;
+﻿using System.Windows;
 using Microsoft.Extensions.DependencyInjection;
-using StudyManager.Services;
-using StudyManager.WpfApp.Pages;
+using StudyManager.Services;            // AddStudyServices()
+using StudyManager.Repositories;        // AddRepositories() (коли зробиш)
+using StudyManager.WpfApp.Navigation;
+using StudyManager.WpfApp.ViewModels;
 
 namespace StudyManager.WpfApp;
 
 public partial class App : Application
 {
-    private IServiceProvider _serviceProvider = null!;
+    private ServiceProvider _provider = null!;
 
     protected override void OnStartup(StartupEventArgs e)
     {
@@ -16,30 +17,29 @@ public partial class App : Application
 
         var services = new ServiceCollection();
 
-        // Реєстрація сервісів даних (IoC/DI)
-        services.AddStudyManagerServices();
+        // нижні шари
+        services.AddRepositories();   // реєстрація repo/store
+        services.AddStudyServices();  // реєстрація IStudyService
 
-        // Реєстрація UI
+        // навігація
+        services.AddSingleton<INavigationService, NavigationService>();
+
+        // ViewModels
+        services.AddSingleton<MainViewModel>();
+        services.AddTransient<SubjectsListViewModel>();
+        services.AddTransient<SubjectDetailsViewModel>();
+        services.AddTransient<LessonDetailsViewModel>();
+
+        // MainWindow
         services.AddSingleton<MainWindow>();
-        services.AddTransient<SubjectsPage>();
 
-        services.AddTransient<Func<Guid, SubjectDetailsPage>>(sp =>
-            subjectId => new SubjectDetailsPage(
-                sp.GetRequiredService<IStudyRepository>(),
-                subjectId,
-                sp.GetRequiredService<Func<Guid, LessonDetailsPage>>()));
+        _provider = services.BuildServiceProvider();
 
-        services.AddTransient<Func<Guid, LessonDetailsPage>>(sp =>
-            lessonId => new LessonDetailsPage(
-                sp.GetRequiredService<IStudyRepository>(),
-                lessonId));
+        var nav = _provider.GetRequiredService<INavigationService>();
+        nav.NavigateTo<SubjectsListViewModel>();
 
-        _serviceProvider = services.BuildServiceProvider();
-
-        var mainWindow = _serviceProvider.GetRequiredService<MainWindow>();
-        mainWindow.Show();
-
-        // Стартова навігація на список предметів
-        mainWindow.Navigate(_serviceProvider.GetRequiredService<SubjectsPage>());
+        var window = _provider.GetRequiredService<MainWindow>();
+        window.DataContext = _provider.GetRequiredService<MainViewModel>();
+        window.Show();
     }
 }

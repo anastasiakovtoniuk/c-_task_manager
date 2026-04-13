@@ -1,13 +1,14 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using StudyManager.Services.Implementation;
+using StudyManager.Services.Interfaces;
 
 namespace StudyManager.Services;
 
 public static class ServiceCollectionExtensions
 {
-    public static IServiceCollection AddStudyManagerServices(this IServiceCollection services)
+    public static IServiceCollection AddStudyServices(this IServiceCollection services)
     {
-        services.AddSingleton<IStudyStore, FakeStudyStore>();
-        services.AddSingleton<IStudyRepository, StudyRepository>();
+        services.AddSingleton<IStudyService, StudyService>();
         return services;
     }
 }

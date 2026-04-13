@@ -7,7 +7,7 @@ namespace StudyManager.Storage;
 public sealed class LessonRecord
 {
     public Guid Id { get; }
-    public Guid SubjectId { get; } // лише Id предмета (без посилання на об'єкт Subject)
+    public Guid SubjectId { get; } // лише Id предмета 
     public DateOnly Date { get; set; }
     public TimeOnly StartTime { get; set; }
     public TimeOnly EndTime { get; set; }
