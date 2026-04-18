@@ -1,24 +1,93 @@
 ﻿<UserControl x:Class="StudyManager.WpfApp.Views.SubjectsListView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <Grid Margin="12">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Background="{StaticResource BgBrush}">
+    <Border Style="{StaticResource Card}">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
 
-        <TextBlock FontSize="20" FontWeight="SemiBold" Text="Предмети"/>
+            <TextBlock Text="Предмети" Style="{StaticResource TitleText}"/>
 
-        <ListBox Grid.Row="1"
-                 ItemsSource="{Binding Subjects}"
-                 SelectedItem="{Binding Selected}"
-                 DisplayMemberPath="Name"
-                 Margin="0,10,0,10"/>
+            
+            <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,10">
+                <TextBox Width="260"
+                         Margin="0,0,10,0"
+                         Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"/>
 
-        <Button Grid.Row="2"
-                Content="Відкрити"
-                Command="{Binding OpenSubjectCommand}"
-                Width="120" Height="32"/>
-    </Grid>
+                <ComboBox Width="170"
+                          Margin="0,0,10,0"
+                          Style="{StaticResource ModernComboBox}"
+                          ItemsSource="{Binding DomainOptions}"
+                          SelectedItem="{Binding SelectedDomain}"/>
+
+                <ComboBox Width="150"
+                          Margin="0,0,10,0"
+                          Style="{StaticResource ModernComboBox}"
+                          ItemsSource="{Binding SortOptions}"
+                          SelectedItem="{Binding SelectedSort}"/>
+
+                <Button Content="Оновити"
+                        Style="{StaticResource SecondaryButton}"
+                        Command="{Binding RefreshCommand}"
+                        Width="110"/>
+            </StackPanel>
+
+            
+            <Grid Grid.Row="2" Margin="0,0,0,10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="90"/>
+                    <ColumnDefinition Width="170"/>
+                    <ColumnDefinition Width="120"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBox Grid.Column="0"
+                         Margin="0,0,10,0"
+                         Text="{Binding NewName, UpdateSourceTrigger=PropertyChanged}"
+                         />
+
+                <TextBox Grid.Column="1"
+                         Margin="0,0,10,0"
+                         Text="{Binding NewEcts, UpdateSourceTrigger=PropertyChanged}"
+                         />
+
+                <ComboBox Grid.Column="2"
+                          Margin="0,0,10,0"
+                          Style="{StaticResource ModernComboBox}"
+                          ItemsSource="{Binding CreateDomainOptions}"
+                          SelectedItem="{Binding NewDomain}"/>
+
+                <Button Grid.Column="3"
+                        Content="Додати"
+                        Style="{StaticResource PrimaryButton}"
+                        Command="{Binding AddSubjectCommand}"/>
+            </Grid>
+
+            <ListBox Grid.Row="3"
+                     ItemsSource="{Binding SubjectsView}"
+                     SelectedItem="{Binding Selected}"
+                     DisplayMemberPath="Name"/>
+
+            <StackPanel Grid.Row="4" Orientation="Horizontal" Margin="0,12,0,0">
+                <Button Content="Відкрити"
+                        Style="{StaticResource PrimaryButton}"
+                        Command="{Binding OpenSubjectCommand}"
+                        Width="120"/>
+
+                <Button Content="Видалити"
+                        Margin="10,0,0,0"
+                        Background="#FEE2E2"
+                        Foreground="#991B1B"
+                        Style="{StaticResource ButtonBaseModern}"
+                        Command="{Binding DeleteSubjectCommand}"
+                        Width="120"/>
+            </StackPanel>
+        </Grid>
+    </Border>
 </UserControl>

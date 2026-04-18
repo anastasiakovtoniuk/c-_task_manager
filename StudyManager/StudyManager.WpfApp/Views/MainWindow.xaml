@@ -3,33 +3,50 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vm="clr-namespace:StudyManager.WpfApp.ViewModels"
         xmlns:v="clr-namespace:StudyManager.WpfApp.Views"
-        Title="StudyManager" Height="520" Width="900">
-    <Window.Resources>
-        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        Title="StudyManager" Height="520" Width="900"
+        Background="{StaticResource BgBrush}"
+        UseLayoutRounding="True"
+        SnapsToDevicePixels="True">
 
+    <Window.Resources>
         <DataTemplate DataType="{x:Type vm:SubjectsListViewModel}">
             <v:SubjectsListView/>
         </DataTemplate>
-
         <DataTemplate DataType="{x:Type vm:SubjectDetailsViewModel}">
             <v:SubjectDetailsView/>
         </DataTemplate>
-
         <DataTemplate DataType="{x:Type vm:LessonDetailsViewModel}">
             <v:LessonDetailsView/>
         </DataTemplate>
     </Window.Resources>
 
     <DockPanel>
-        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="10">
-            <Button Content="← Назад"
-                    Width="110"
-                    Command="{Binding BackCommand}"
-                    IsEnabled="{Binding CanGoBack}"/>
-            <TextBlock Margin="12,0,0,0" VerticalAlignment="Center"
-                       Text="Менеджер занять" FontWeight="SemiBold"/>
-        </StackPanel>
+        <Border DockPanel.Dock="Top"
+                Background="White"
+                BorderBrush="{StaticResource BorderBrush}"
+                BorderThickness="0,0,0,1"
+                Padding="14,10">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
 
-        <ContentControl Content="{Binding CurrentViewModel}" Margin="10"/>
+                <Button Content="← Назад"
+                        Style="{StaticResource SecondaryButton}"
+                        Width="110"
+                        Command="{Binding BackCommand}"
+                        IsEnabled="{Binding CanGoBack}"/>
+
+                <TextBlock Grid.Column="1"
+                           VerticalAlignment="Center"
+                           Margin="12,0,0,0"
+                           Text="Менеджер занять"
+                           FontSize="16"
+                           FontWeight="SemiBold"/>
+            </Grid>
+        </Border>
+
+        <ContentControl Content="{Binding CurrentViewModel}" Margin="14"/>
     </DockPanel>
 </Window>

@@ -1,49 +1,232 @@
 ﻿<UserControl x:Class="StudyManager.WpfApp.Views.SubjectDetailsView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <Grid Margin="12">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Background="{StaticResource BgBrush}">
+    <Border Style="{StaticResource Card}">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                
+                <RowDefinition Height="Auto"/>
+                
+                <RowDefinition Height="Auto"/>
+                
+                <RowDefinition Height="Auto"/>
+                
+                <RowDefinition/>
+               
+                <RowDefinition Height="Auto"/>
+                
+            </Grid.RowDefinitions>
 
-        <TextBlock FontSize="20" FontWeight="SemiBold" Text="{Binding Subject.Name}"/>
+            
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
 
-        <StackPanel Grid.Row="1" Margin="0,6,0,10">
-            <TextBlock Text="{Binding Subject.EctsCredits, StringFormat=ECTS: {0}}"/>
-            <TextBlock Text="{Binding Subject.Domain, StringFormat=Сфера: {0}}"/>
-            <TextBlock Text="{Binding Subject.TotalDuration, StringFormat=Загальна тривалість: {0}}"/>
-        </StackPanel>
+                <TextBlock Text="{Binding Subject.Name}" Style="{StaticResource TitleText}"/>
 
-        <Grid Grid.Row="2">
-            <ListBox ItemsSource="{Binding Lessons}"
-                     SelectedItem="{Binding SelectedLesson}"
-                     DisplayMemberPath="Topic"/>
+                
+                <Button Grid.Column="1"
+        Content="Редагувати предмет"
+        Command="{Binding EditSubjectCommand}"
+        Width="170">
+                    <Button.Style>
+                        <Style TargetType="Button" BasedOn="{StaticResource SecondaryButton}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsEditingSubject}" Value="True">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
 
-            <TextBlock Text="Немає занять для цього предмета."
-           HorizontalAlignment="Center"
-           VerticalAlignment="Center"
-           Foreground="Gray"
-           FontStyle="Italic">
-                <TextBlock.Style>
-                    <Style TargetType="TextBlock">
+                
+                <StackPanel Grid.Column="1" Orientation="Horizontal">
+                    <StackPanel.Style>
+                        <Style TargetType="StackPanel">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsEditingSubject}" Value="True">
+                                    <Setter Property="Visibility" Value="Visible"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </StackPanel.Style>
+
+                    <Button Content="Зберегти"
+                            Style="{StaticResource PrimaryButton}"
+                            Command="{Binding SaveSubjectCommand}"
+                            Width="120"/>
+
+                    <Button Content="Скасувати"
+                            Margin="10,0,0,0"
+                            Style="{StaticResource SecondaryButton}"
+                            Command="{Binding CancelEditSubjectCommand}"
+                            Width="120"/>
+                </StackPanel>
+            </Grid>
+
+            
+            <Grid Grid.Row="1" Margin="0,0,0,10">
+                <Grid.Style>
+                    <Style TargetType="Grid">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsEditingSubject}" Value="True">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Grid.Style>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel>
+                    <TextBlock Text="ECTS" Foreground="{StaticResource MutedTextBrush}"/>
+                    <TextBlock Text="{Binding Subject.EctsCredits}" FontWeight="SemiBold"/>
+                </StackPanel>
+
+                <StackPanel Grid.Column="1">
+                    <TextBlock Text="Сфера" Foreground="{StaticResource MutedTextBrush}"/>
+                    <TextBlock Text="{Binding Subject.Domain}" FontWeight="SemiBold"/>
+                </StackPanel>
+
+                <StackPanel Grid.Column="2">
+                    <TextBlock Text="Загальна тривалість" Foreground="{StaticResource MutedTextBrush}"/>
+                    <TextBlock Text="{Binding Subject.TotalDuration}" FontWeight="SemiBold"/>
+                </StackPanel>
+            </Grid>
+
+            
+            <Grid Grid.Row="1" Margin="0,0,0,10">
+                <Grid.Style>
+                    <Style TargetType="Grid">
                         <Setter Property="Visibility" Value="Collapsed"/>
                         <Style.Triggers>
-                            <DataTrigger Binding="{Binding HasNoLessons}" Value="True">
+                            <DataTrigger Binding="{Binding IsEditingSubject}" Value="True">
                                 <Setter Property="Visibility" Value="Visible"/>
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
-                </TextBlock.Style>
-            </TextBlock>
-        </Grid>
+                </Grid.Style>
 
-        <Button Grid.Row="3"
-                Content="Деталі заняття"
-                Command="{Binding OpenLessonCommand}"
-                Width="140" Height="32"
-                Margin="0,10,0,0"/>
-    </Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="120"/>
+                    <ColumnDefinition Width="180"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBox Grid.Column="0"
+                         Margin="0,0,10,0"
+                         Text="{Binding EditName, UpdateSourceTrigger=PropertyChanged}"/>
+
+                <TextBox Grid.Column="1"
+                         Margin="0,0,10,0"
+                         Text="{Binding EditEcts, UpdateSourceTrigger=PropertyChanged}"/>
+
+                <ComboBox Grid.Column="2"
+                          Style="{StaticResource ModernComboBox}"
+                          ItemsSource="{Binding SubjectDomainOptions}"
+                          SelectedItem="{Binding EditDomain}"/>
+            </Grid>
+
+            
+            <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,0,0,10">
+                <TextBox Width="280"
+                         Margin="0,0,10,0"
+                         Text="{Binding LessonSearchText, UpdateSourceTrigger=PropertyChanged}"/>
+
+                <ComboBox Width="180"
+                          Style="{StaticResource ModernComboBox}"
+                          ItemsSource="{Binding LessonSortOptions}"
+                          SelectedItem="{Binding SelectedLessonSort}"/>
+            </StackPanel>
+
+            
+            <Grid Grid.Row="3" Margin="0,0,0,10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="140"/>
+                    <ColumnDefinition Width="90"/>
+                    <ColumnDefinition Width="90"/>
+                    <ColumnDefinition Width="140"/>
+                    <ColumnDefinition Width="120"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBox Grid.Column="0"
+                         Margin="0,0,10,0"
+                         Text="{Binding NewLessonTopic, UpdateSourceTrigger=PropertyChanged}"/>
+
+                <DatePicker Grid.Column="1"
+                            Margin="0,0,10,0"
+                            SelectedDate="{Binding NewLessonDate}"/>
+
+                <TextBox Grid.Column="2"
+                         Margin="0,0,10,0"
+                         Text="{Binding NewStart, UpdateSourceTrigger=PropertyChanged}"/>
+
+                <TextBox Grid.Column="3"
+                         Margin="0,0,10,0"
+                         Text="{Binding NewEnd, UpdateSourceTrigger=PropertyChanged}"/>
+
+                <ComboBox Grid.Column="4"
+                          Margin="0,0,10,0"
+                          Style="{StaticResource ModernComboBox}"
+                          ItemsSource="{Binding LessonTypeOptions}"
+                          SelectedItem="{Binding NewLessonType}"/>
+
+                <Button Grid.Column="5"
+                        Content="Додати"
+                        Style="{StaticResource PrimaryButton}"
+                        Command="{Binding AddLessonCommand}"/>
+            </Grid>
+
+            
+            <Grid Grid.Row="4">
+                <ListBox ItemsSource="{Binding LessonsView}"
+                         SelectedItem="{Binding SelectedLesson}"
+                         DisplayMemberPath="Topic"/>
+
+                <TextBlock Text="Немає занять для цього предмета."
+                           Foreground="{StaticResource MutedTextBrush}"
+                           FontStyle="Italic"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center">
+                    <TextBlock.Style>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding HasNoLessons}" Value="True">
+                                    <Setter Property="Visibility" Value="Visible"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+            </Grid>
+
+            
+            <StackPanel Grid.Row="5" Orientation="Horizontal" Margin="0,12,0,0">
+                <Button Content="Деталі заняття"
+                        Style="{StaticResource PrimaryButton}"
+                        Command="{Binding OpenLessonCommand}"
+                        Width="150"/>
+
+                <Button Content="Видалити заняття"
+                        Margin="10,0,0,0"
+                        Background="#FEE2E2"
+                        Foreground="#991B1B"
+                        Style="{StaticResource ButtonBaseModern}"
+                        Command="{Binding DeleteLessonCommand}"
+                        Width="170"/>
+            </StackPanel>
+        </Grid>
+    </Border>
 </UserControl>
